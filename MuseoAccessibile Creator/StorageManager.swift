@@ -72,7 +72,7 @@ struct StorageManager {
             let url = roomURL.appendingPathComponent("pois.json")
             try data.write(to: url)
             print("POI salvati correttamente in \(url)")
-            print("Salvati \(pois)")
+            //print("Salvati \(pois)")
         } catch {
             print("Errore nel salvataggio dei POI: \(error)")
         }
@@ -154,5 +154,15 @@ struct StorageManager {
             print("Errore nel rimuovere la directory: \(error)")
             return false
         }
+    }
+    
+    func saveFile(from sourceURL: URL) throws -> URL {
+        let destinationURL = roomURL.appendingPathComponent(sourceURL.lastPathComponent)
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: destinationURL.path) {
+            try fileManager.removeItem(at: destinationURL)
+        }
+        try fileManager.copyItem(at: sourceURL, to: destinationURL)
+        return destinationURL
     }
 }

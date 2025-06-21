@@ -19,9 +19,9 @@ struct RoomView : View {
     }
     
     var body: some View {
-        let arViewContainer = ARViewContainer(selectedPOI: $selectedPOI, viewModel: viewModel)
         ZStack {
-            arViewContainer.edgesIgnoringSafeArea(.all)
+            ARViewContainer(selectedPOI: $selectedPOI, viewModel: viewModel)
+                .ignoresSafeArea(edges: .bottom)
         }
         .sheet(item: $selectedPOI) { poi in
             PoiDetailView(
@@ -42,11 +42,14 @@ struct RoomView : View {
                     }
                     selectedPOI = nil
                     editablePOI = nil
-                }
+                },
+                viewModel: viewModel
             )
             .onAppear {
                 editablePOI = poi // inizializza con una copia
             }.interactiveDismissDisabled()
         }
+        .navigationTitle(viewModel.roomName)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

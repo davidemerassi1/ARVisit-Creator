@@ -81,15 +81,25 @@ struct ARViewContainer : UIViewRepresentable {
         
         func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
             for anchor in anchors {
-                if anchor.name != nil {
+                if let name = anchor.name {
                     let anchorEntity = AnchorEntity(anchor: anchor)
-                    anchorEntity.name = anchor.name ?? "Unknown"
+                    anchorEntity.name = name
                     let sphere = ModelEntity(mesh: .generateSphere(radius: 0.03))
-                    sphere.model?.materials = [SimpleMaterial(color: .blue, isMetallic: false)]
-                    sphere.generateCollisionShapes(recursive: true)
-                    anchorEntity.addChild(sphere)
-                    viewModel.arView.scene.anchors.append(anchorEntity)
-                    viewModel.arAnchors[anchor.name!] = anchor
+                    let poi = viewModel.pois[anchorEntity.name]
+                    if let poi {
+                        switch poi.type {
+                        case .interest:
+                            sphere.model?.materials = [SimpleMaterial(color: .blue, isMetallic: false)]
+                        case .service:
+                            sphere.model?.materials = [SimpleMaterial(color: .green, isMetallic: false)]
+                        case .danger:
+                            sphere.model?.materials = [SimpleMaterial(color: .red, isMetallic: false)]
+                        }
+                        sphere.generateCollisionShapes(recursive: true)
+                        anchorEntity.addChild(sphere)
+                        viewModel.arView.scene.anchors.append(anchorEntity)
+                        viewModel.arAnchors[anchor.name!] = anchor
+                    }
                 }
             }
         }
