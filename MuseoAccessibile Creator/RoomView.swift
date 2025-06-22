@@ -13,6 +13,7 @@ struct RoomView : View {
     @State private var selectedPOI: Poi? = nil
     @State private var editablePOI: Poi? = nil
     @StateObject private var viewModel: RoomViewModel
+    @State var showingAlert = false
     
     init(roomURL: URL) {
         _viewModel = StateObject(wrappedValue: RoomViewModel(roomURL: roomURL))
@@ -31,10 +32,14 @@ struct RoomView : View {
                 ),
                 onSave: {
                     if let poiToSave = editablePOI {
-                        viewModel.addPoi(poi: poiToSave)
+                        if viewModel.addPoi(poi: poiToSave) {
+                            selectedPOI = nil
+                            editablePOI = nil
+                        } else {
+                            showingAlert = true
+                        }
                     }
-                    selectedPOI = nil
-                    editablePOI = nil
+                    
                 },
                 onDelete: {
                     if let poiToDelete = editablePOI {
@@ -47,7 +52,11 @@ struct RoomView : View {
             )
             .onAppear {
                 editablePOI = poi // inizializza con una copia
-            }.interactiveDismissDisabled()
+            }
+            .interactiveDismissDisabled()
+            .alert("Compilare tutti i campi obbligatori", isPresented: $showingAlert) {
+                Button("OK", role: .cancel) { }
+            }
         }
         .navigationTitle(viewModel.roomName)
         .navigationBarTitleDisplayMode(.inline)

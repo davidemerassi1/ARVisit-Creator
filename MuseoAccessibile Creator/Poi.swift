@@ -16,12 +16,21 @@ struct Poi: Identifiable, Codable, Equatable {
         var id: String { self.rawValue }
     }
     
+    enum ServiceType: String, Codable, CaseIterable, Identifiable {
+        case bagno = "Bagno"
+        var id: String { self.rawValue }
+    }
+    
     var id: UUID
     var name: String = ""
     var description: String = ""
     var type: PoiType = .interest
     var audioguideUrl: URL?
     var imageUrl: URL?
+    var linkToDescription: String = ""
+    var serviceType: ServiceType?
+    var notify: Bool = false
+    var distance: Int?
     
     init(id: UUID = UUID()) {
         self.id = id

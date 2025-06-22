@@ -25,10 +25,16 @@ class RoomViewModel: ObservableObject {
         storageManager.loadWorldMap()
     }
     
-    func addPoi(poi: Poi) {
+    func addPoi(poi: Poi) -> Bool {
+        var poi = poi
+        if (!checkPoi(poi: &poi)) {
+            return false
+        }
+        
         pois[poi.id.uuidString] = poi
         setColor(poi: poi)
         storageManager.save(pois: Array(pois.values), session: arView.session)
+        return true
     }
     
     func removePoi(poi: Poi) {
@@ -100,5 +106,38 @@ class RoomViewModel: ObservableObject {
             print(error)
         }
         return nil
+    }
+    
+    func checkPoi(poi: inout Poi) -> Bool {
+        switch poi.type {
+        case .interest:
+            guard (!poi.notify || poi.distance != nil) && !poi.name.isEmpty else {
+                return false
+            }
+            if !poi.notify {
+                poi.distance = nil
+            }
+            poi.serviceType = nil
+        case .service:
+            guard poi.serviceType != nil else {
+                return false
+            }
+            poi.audioguideUrl = nil
+            poi.imageUrl = nil
+            poi.description = ""
+            poi.distance = nil
+            poi.notify = false
+            poi.linkToDescription = ""
+        case .danger:
+            guard poi.distance != nil && !poi.name.isEmpty else {
+                return false
+            }
+            poi.audioguideUrl = nil
+            poi.imageUrl = nil
+            poi.notify = false
+            poi.serviceType = nil
+            poi.linkToDescription = ""
+        }
+        return true
     }
 }
