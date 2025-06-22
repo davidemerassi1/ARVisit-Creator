@@ -52,6 +52,15 @@ struct StorageManager {
         let decoder = JSONDecoder()
         let url = roomURL.appendingPathComponent("pois.json")
         do {
+            
+            let contents = try FileManager.default.contentsOfDirectory(at: roomURL, includingPropertiesForKeys: nil, options: [])
+            for content in contents {
+                print(content)
+            }
+            
+            
+            
+            
             let data = try Data(contentsOf: url)
             let pois = try decoder.decode([Poi].self, from: data)
             let poiDict = Dictionary(uniqueKeysWithValues: pois.map { ($0.id.uuidString, $0) })
@@ -72,7 +81,7 @@ struct StorageManager {
             let url = roomURL.appendingPathComponent("pois.json")
             try data.write(to: url)
             print("POI salvati correttamente in \(url)")
-            //print("Salvati \(pois)")
+            print("Salvati \(pois)")
         } catch {
             print("Errore nel salvataggio dei POI: \(error)")
         }
@@ -164,5 +173,21 @@ struct StorageManager {
         }
         try fileManager.copyItem(at: sourceURL, to: destinationURL)
         return destinationURL
+    }
+    
+    func saveImage(image: UIImage) throws -> URL {
+        let fileManager = FileManager.default
+        var destinationURL: URL
+        repeat {
+            let filename = UUID().uuidString + ".jpg"
+            destinationURL = roomURL.appendingPathComponent(filename)
+        } while fileManager.fileExists(atPath: destinationURL.path)
+        
+        if let jpegData = image.jpegData(compressionQuality: 0.8) {
+            try jpegData.write(to: destinationURL)
+            return destinationURL
+        } else {
+            throw NSError(domain: "Saving Image Error", code: 999, userInfo: nil)
+        }
     }
 }

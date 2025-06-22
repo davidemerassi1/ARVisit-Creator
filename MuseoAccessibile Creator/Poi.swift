@@ -21,6 +21,7 @@ struct Poi: Identifiable, Codable, Equatable {
     var description: String = ""
     var type: PoiType = .interest
     var audioguideUrl: URL?
+    var imageUrl: URL?
     
     init(id: UUID = UUID()) {
         self.id = id

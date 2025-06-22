@@ -73,13 +73,32 @@ class RoomViewModel: ObservableObject {
         }
     }
     
-    func importFile(url: URL) -> URL? {
+    func saveFile(url: URL) -> URL? {
         do {
             return try storageManager.saveFile(from: url)
         } catch {
-            print("Errore:")
-            print(error)
+            print("Errore: \(error)")
             return nil
         }
+    }
+    
+    func saveImage(image: UIImage) -> URL? {
+        do {
+            return try storageManager.saveImage(image: image)
+        } catch {
+            print("Errore: \(error)")
+            return nil
+        }
+    }
+    
+    func getImage(url: URL) -> UIImage? {
+        do {
+            let data = try Data(contentsOf: url)
+            print(data)
+            return UIImage(data: data)
+        } catch {
+            print(error)
+        }
+        return nil
     }
 }
