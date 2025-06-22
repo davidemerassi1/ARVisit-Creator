@@ -28,8 +28,19 @@ struct RoomSelectorView : View {
                             rooms.remove(at: index)
                         }
                     }
+                    if rooms.isEmpty {
+                        editMode = .inactive
+                    }
                 }
             }
+            .overlay {
+                    if rooms.isEmpty {
+                        Text("Nessun ambiente presente.\nTocca \"+\" per crearne uno")
+                            .foregroundStyle(.secondary)
+                            .font(.title3)
+                            .multilineTextAlignment(.center)
+                    }
+                }
             .navigationTitle("Ambienti")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
