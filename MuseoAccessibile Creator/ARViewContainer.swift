@@ -87,14 +87,7 @@ struct ARViewContainer : UIViewRepresentable {
                     let sphere = ModelEntity(mesh: .generateSphere(radius: 0.03))
                     let poi = viewModel.pois[anchorEntity.name]
                     if let poi {
-                        switch poi.type {
-                        case .interest:
-                            sphere.model?.materials = [SimpleMaterial(color: .blue, isMetallic: false)]
-                        case .service:
-                            sphere.model?.materials = [SimpleMaterial(color: .green, isMetallic: false)]
-                        case .danger:
-                            sphere.model?.materials = [SimpleMaterial(color: .red, isMetallic: false)]
-                        }
+                        sphere.model?.materials = [SimpleMaterial(color: poi.type == .danger ? .red : poi.type == .service ? .green : .blue, isMetallic: false)]
                         sphere.generateCollisionShapes(recursive: true)
                         anchorEntity.addChild(sphere)
                         viewModel.arView.scene.anchors.append(anchorEntity)
@@ -105,16 +98,16 @@ struct ARViewContainer : UIViewRepresentable {
         }
         
         /*
-        func updateScene(arView: ARView) {
-            // 1. Rimuovi anchor non più presenti
-            for anchor in arView.scene.anchors {
-                if parent.arMapManager.pois[anchor.name] == nil {
-                    anchor.removeFromParent()
-                }
-            }
-            
-            // 2. Aggiungi anchor nuovi o aggiorna esistenti
-        }
+         func updateScene(arView: ARView) {
+         // 1. Rimuovi anchor non più presenti
+         for anchor in arView.scene.anchors {
+         if parent.arMapManager.pois[anchor.name] == nil {
+         anchor.removeFromParent()
+         }
+         }
+         
+         // 2. Aggiungi anchor nuovi o aggiorna esistenti
+         }
          */
         
         @objc func handleLongPress(_ sender: UITapGestureRecognizer) {
