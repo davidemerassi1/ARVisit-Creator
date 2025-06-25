@@ -111,7 +111,7 @@ class RoomViewModel: ObservableObject {
     func checkPoi(poi: inout Poi) -> Bool {
         switch poi.type {
         case .interest:
-            guard (!poi.notify || poi.distance != nil) && !poi.name.isEmpty else {
+            guard (!poi.notify || poi.distance != nil) && !poi.name.isEmpty && (poi.audioguideUrl != nil || poi.imageUrl != nil || !poi.description.isEmpty || !poi.linkToDescription.isEmpty) else {
                 return false
             }
             if !poi.notify {
@@ -129,7 +129,7 @@ class RoomViewModel: ObservableObject {
             poi.notify = false
             poi.linkToDescription = ""
         case .danger:
-            guard poi.distance != nil && !poi.name.isEmpty else {
+            guard poi.distance != nil && !poi.name.isEmpty && !poi.description.isEmpty else {
                 return false
             }
             poi.audioguideUrl = nil

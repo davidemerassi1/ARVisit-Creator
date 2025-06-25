@@ -17,6 +17,11 @@ struct PoiDetailView: View {
     var onSave: () -> Void
     var onDelete: () -> Void
     let viewModel: RoomViewModel
+    private var numberFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter
+    }
     
     var body: some View {
         NavigationStack {
@@ -76,8 +81,7 @@ struct PoiDetailView: View {
                         Toggle("Notifica quando vicino", isOn: $poi.notify)
                         if (poi.notify) {
                             HStack {
-                                TextField("Distanza a cui notificare", value: $poi.distance, formatter: NumberFormatter())
-                                    .keyboardType(.numberPad)
+                                TextField("Distanza a cui notificare", value: $poi.distance, formatter:numberFormatter).keyboardType(.decimalPad)
                                 Text("metri")
                             }
                         }
@@ -95,12 +99,11 @@ struct PoiDetailView: View {
                     .pickerStyle(.navigationLink)
                 } else {
                     Section {
-                        TextField("Descrizione", text: $poi.description, axis: .vertical)
+                        TextField("Messaggio da mostrare", text: $poi.description, axis: .vertical)
                     }
                     Section {
                         HStack {
-                            TextField("Distanza a cui notificare", value: $poi.distance, formatter: NumberFormatter())
-                                .keyboardType(.numberPad)
+                            TextField("Distanza a cui notificare", value: $poi.distance, formatter: numberFormatter).keyboardType(.decimalPad)
                             Text("metri")
                         }
                     }
