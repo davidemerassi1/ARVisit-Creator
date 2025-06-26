@@ -110,11 +110,19 @@ struct ARViewContainer : UIViewRepresentable {
          }
          */
         
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        
         @objc func handleLongPress(_ sender: UITapGestureRecognizer) {
-            guard sender.state == .began else { return }    //per creare il punto solo la prima volta che la gesture è completata (dopo 0.5 secondi)
             guard let arView = sender.view as? ARView else { return }
-            let tapLocation = sender.location(in: arView)
-            if let result = arView.raycast(from: tapLocation, allowing: .estimatedPlane, alignment: .any).first {
+            guard sender.state == .began else { return }
+            
+            let location = sender.location(in: arView)
+            
+            if let entity = viewModel.arView.entity(at: location),
+               let name = entity.anchor?.name {
+                generator.impactOccurred()
+                viewModel.select(anchorId: name)
+            } else if let result = arView.raycast(from: location, allowing: .estimatedPlane, alignment: .any).first {
                 print("Trovato un piano con raycast")
                 selectedPOI = Poi()
                 viewModel.addAnchor(for: selectedPOI!, position: result.worldTransform)

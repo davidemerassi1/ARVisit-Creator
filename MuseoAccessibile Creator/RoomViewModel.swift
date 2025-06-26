@@ -14,6 +14,7 @@ class RoomViewModel: ObservableObject {
     var pois: [String: Poi] = [:]
     var arView: ARView = ARView(frame: .zero)
     var roomName: String
+    @Published var selectedAnchor: ARAnchor?
     
     init(roomURL: URL) {
         storageManager = StorageManager(roomURL: roomURL)
@@ -139,5 +140,42 @@ class RoomViewModel: ObservableObject {
             poi.linkToDescription = ""
         }
         return true
+    }
+    
+    func select(anchorId: String) {
+        selectedAnchor = arAnchors[anchorId]
+    }
+    
+    func unselect() {
+        selectedAnchor = nil
+        storageManager.saveWorldMap(from: arView.session)
+    }
+    
+    func moveSelectedAnchor(offset: SIMD3<Float>) {
+        guard let anchor = selectedAnchor else { return }
+        
+        let currentPosition = anchor.transform.translation
+        
+        // Crea la nuova trasformazione con la stessa orientazione
+        var newTransform = anchor.transform
+        newTransform.translation += offset
+        
+        arView.session.remove(anchor: anchor)
+        let newAnchor = ARAnchor(name: anchor.name!, transform: newTransform)
+        arView.session.add(anchor: newAnchor)
+        arAnchors[anchor.name!] = newAnchor
+        selectedAnchor = newAnchor
+    }
+}
+
+extension simd_float4x4 {
+    var translation: SIMD3<Float> {
+        get {
+            return SIMD3<Float>(columns.3.x, columns.3.y, columns.3.z)
+        }
+        set {
+            columns.3 = SIMD4<Float>(newValue.x, newValue.y, newValue.z, columns.3.w)
+        }
+        
     }
 }

@@ -23,6 +23,69 @@ struct RoomView : View {
         ZStack {
             ARViewContainer(selectedPOI: $selectedPOI, viewModel: viewModel)
                 .ignoresSafeArea(edges: .bottom)
+            
+            if viewModel.selectedAnchor != nil {
+                VStack {
+                    Spacer()
+                    HStack (spacing: 16) {
+                        Button(action: {
+                                viewModel.moveSelectedAnchor(offset: SIMD3<Float>(0, 0.02, 0))
+                            }) {
+                                Image(systemName: "arrow.up")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                            }
+
+                            Button(action: {
+                                viewModel.moveSelectedAnchor(offset: SIMD3<Float>(0, -0.02, 0))
+                            }) {
+                                Image(systemName: "arrow.down")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                            }
+
+                            Button(action: {
+                                viewModel.moveSelectedAnchor(offset: SIMD3<Float>(-0.02, 0, 0))
+                            }) {
+                                Image(systemName: "arrow.left")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                            }
+
+                            Button(action: {
+                                viewModel.moveSelectedAnchor(offset: SIMD3<Float>(0.02, 0, 0))
+                            }) {
+                                Image(systemName: "arrow.right")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                            }
+
+                            Button(action: {
+                                viewModel.moveSelectedAnchor(offset: SIMD3<Float>(0, 0, -0.02))
+                            }) {
+                                Image(systemName: "arrow.up.right")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                            }
+
+                            Button(action: {
+                                viewModel.moveSelectedAnchor(offset: SIMD3<Float>(0, 0, 0.02))
+                            }) {
+                                Image(systemName: "arrow.down.left")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                            }
+                        Button("Fine") {
+                            viewModel.unselect()
+                        }.font(.title)
+                            .foregroundColor(.white)
+                    }
+                    .padding()
+                    .background(Color.gray.opacity(0.5))
+                    .cornerRadius(12)
+                    .shadow(radius: 4)
+                }
+            }
         }
         .sheet(item: $selectedPOI) { poi in
             PoiDetailView(
