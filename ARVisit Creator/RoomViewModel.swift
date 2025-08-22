@@ -15,6 +15,7 @@ class RoomViewModel: ObservableObject {
     var arView: ARView = ARView(frame: .zero)
     var roomName: String
     @Published var selectedAnchor: ARAnchor?
+    @Published var showCameraAlert = false
     
     init(roomURL: URL) {
         storageManager = StorageManager(roomURL: roomURL)
