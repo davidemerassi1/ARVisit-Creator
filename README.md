@@ -1,9 +1,27 @@
 # ARVisit Creator
 
-Questa è la repository dell'app iOS **ARVisit Creator**, sviluppata come parte del progetto per il corso di Sviluppo di applicazioni mobili.  
-L'applicazione permette di creare e configurare nuovi ambienti museali da rendere accessibili tramite la realtà aumentata.
+Progetto universitario sviluppato per il corso di Sviluppo di applicazioni mobili.
 
-## Repository dell'app client
+**ARVisit Creator** è un’applicazione iOS dedicata alla **creazione dei contenuti** per visite museali accessibili in realtà aumentata.
 
-La parte dedicata all'**esperienza di visita in realtà aumentata** è gestita tramite l'app iOS **ARVisit**, disponibile in questa repository separata:  
-[ARVisit Client](<https://github.com/davidemerassi1/ARVisit>)
+L’applicazione è parte del progetto **ARVisit**, composto da due applicazioni:
+- [**ARVisit**](https://github.com/davidemerassi1/ARVisit), utilizzata dai visitatori  
+- **ARVisit Creator** (questa app), utilizzata per la creazione dei contenuti
+
+## Descrizione
+
+ARVisit Creator permette di creare i contenuti utilizzati dall’app *ARVisit* durante la visita museale.  
+
+È possibile definire:
+- punti di interesse (opere)
+- punti di servizio (bagni, bar, ecc.)
+- punti pericolosi da segnalare (gradini, ostacoli, ecc.)
+
+I punti vengono posizionati nello spazio reale tramite realtà aumentata e successivamente utilizzati dall’app ARVisit.
+
+## Tecnologie utilizzate
+- **iOS**
+- **ARKit** (framework Apple per la realtà aumentata)
+
+## Demo video 
+[Link](https://youtube.com/shorts/bzlcIBWMtUI?feature=share)
